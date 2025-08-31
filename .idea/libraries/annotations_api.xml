@@ -28,6 +28,9 @@
       <root url="jar://$USER_HOME$/tomcat/apache-tomcat-10.1.13/lib/websocket-api.jar!/" />
       <root url="jar://$USER_HOME$/tomcat/apache-tomcat-10.1.13/lib/websocket-client-api.jar!/" />
       <root url="jar://$USER_HOME$/tomcat/apache-tomcat-10.1.13/lib/gson-2.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jakarta.servlet-api-5.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/gson-2.10.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/mysql-connector-j-9.4.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
