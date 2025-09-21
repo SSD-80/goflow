@@ -3,6 +3,7 @@ package service.driver;
 import model.Driver;
 import org.xml.sax.SAXException;
 import util.DBConnectionUtil;
+import util.PasswordUtil;
 import util.QueryUtil;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,7 +59,8 @@ public class DriverServiceImpl implements IDriverService {
             this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_driver"));
             connection.setAutoCommit(false);
 
-            String hashedPassword = generateMD5(driver.getPassword());
+//            String hashedPassword = generateMD5(driver.getPassword());
+            String hashedPassword = PasswordUtil.hashPassword(driver.getPassword());
 
             this.preparedStatement.setString(1, driver.getName());
             this.preparedStatement.setString(2, driver.getEmail());
@@ -302,27 +304,27 @@ public class DriverServiceImpl implements IDriverService {
     }
 
     // This method is used to generate the MD5 hash
-    public String generateMD5(String password) {
-        try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            // Add password bytes to digest
-            md.update(password.getBytes());
-
-            // Get the hash's bytes
-            byte[] bytes = md.digest();
-
-            // Convert the bytes to a hexadecimal string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-            }
-
-            // Return the complete hash
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    public String generateMD5(String password) {
+//        try {
+//            // Create MessageDigest instance for MD5
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//
+//            // Add password bytes to digest
+//            md.update(password.getBytes());
+//
+//            // Get the hash's bytes
+//            byte[] bytes = md.digest();
+//
+//            // Convert the bytes to a hexadecimal string
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0; i < bytes.length; i++) {
+//                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+//            }
+//
+//            // Return the complete hash
+//            return sb.toString();
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }
