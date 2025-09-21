@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import model.Rider;
 import util.DBConnectionUtil;
+import util.PasswordUtil;
 import util.QueryUtil;
 
 import java.io.IOException;
@@ -64,7 +65,8 @@ public class RiderServiceImpl implements IRiderService {
             this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_rider"));
             connection.setAutoCommit(false);
 
-            String hashedPassword = generateMD5(rider.getPassword());
+//            String hashedPassword = generateMD5(rider.getPassword());
+            String hashedPassword = PasswordUtil.hashPassword(rider.getPassword());
 
             this.preparedStatement.setString(1, rider.getName());
             this.preparedStatement.setString(2, rider.getEmail());
