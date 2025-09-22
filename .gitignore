@@ -1,6 +1,17 @@
 # Compiled class file
 *.class
 
+# IDE files
+.idea/
+.project
+*.iml
+
+# Build outputs
+/build/
+/out/
+/target/
+
+
 # Log file
 *.log
 
