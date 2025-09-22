@@ -35,4 +35,7 @@ public interface IRideService {
 
     // remove ride
     void removeRide(int id);
+
+    // Secure method for Rider ownership check
+    Ride getRideByIdForRider(int rideId, int sessionRiderId, String role);
 }
