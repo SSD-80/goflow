@@ -305,31 +305,6 @@ public class DriverServiceImpl implements IDriverService {
         return driverList;
     }
 
-    // This method is used to generate the MD5 hash
-//    public String generateMD5(String password) {
-//        try {
-//            // Create MessageDigest instance for MD5
-//            MessageDigest md = MessageDigest.getInstance("MD5");
-//
-//            // Add password bytes to digest
-//            md.update(password.getBytes());
-//
-//            // Get the hash's bytes
-//            byte[] bytes = md.digest();
-//
-//            // Convert the bytes to a hexadecimal string
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 0; i < bytes.length; i++) {
-//                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
-//            }
-//
-//            // Return the complete hash
-//            return sb.toString();
-//        } catch (NoSuchAlgorithmException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     @Override
     public Driver getDriverByOAuth(String provider, String sub) {
         Driver driver = null;
