@@ -82,8 +82,9 @@ public class DriverLogin extends HttpServlet {
                 throw new AuthException("Invalid email or password");
 
         } catch (AuthException e) { // not authenticated exception
-            response.sendRedirect("./RiderLogin?errorMessage=" + java.net.URLEncoder.encode(e.getMessage(), "UTF-8"));
-//            response.sendRedirect("./DriverLogin?flag=invalid"); // redirect to login with invalid flag
+            request.setAttribute("errorMessage", e.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Auth/DriverLogin.jsp");
+            dispatcher.forward(request, response);
             e.printStackTrace();
         } catch (EmptyInputsException e) { // empty inputs exception
             response.sendRedirect("./DriverLogin"); // redirect to login

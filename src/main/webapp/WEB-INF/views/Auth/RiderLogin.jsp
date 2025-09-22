@@ -22,7 +22,7 @@
         response.sendRedirect("./Login");
         return;
     }
-    String errorMessage = request.getParameter("errorMessage");
+    String errorMessage = (String) request.getAttribute("errorMessage");
 %>
 
 <jsp:include page="/WEB-INF/views/Common/Header.jsp"></jsp:include>
