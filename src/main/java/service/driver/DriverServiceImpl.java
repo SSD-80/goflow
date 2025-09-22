@@ -59,8 +59,10 @@ public class DriverServiceImpl implements IDriverService {
             this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_driver"));
             connection.setAutoCommit(false);
 
-//            String hashedPassword = generateMD5(driver.getPassword());
-            String hashedPassword = PasswordUtil.hashPassword(driver.getPassword());
+            String hashedPassword = null;
+            if (driver.getPassword() != null && !driver.getPassword().isEmpty()) {
+                hashedPassword = PasswordUtil.hashPassword(driver.getPassword());
+            }
 
             this.preparedStatement.setString(1, driver.getName());
             this.preparedStatement.setString(2, driver.getEmail());
@@ -327,4 +329,88 @@ public class DriverServiceImpl implements IDriverService {
 //            throw new RuntimeException(e);
 //        }
 //    }
+
+    @Override
+    public Driver getDriverByOAuth(String provider, String sub) {
+        Driver driver = null;
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("driver_by_oauth"));
+            this.preparedStatement.setString(1, provider);
+            this.preparedStatement.setString(2, sub);
+
+            ResultSet resultSet = this.preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                driver = new Driver();
+                driver.setID(resultSet.getInt(1));
+                driver.setName(resultSet.getString(1));
+                driver.setEmail(resultSet.getString(3));
+                driver.setVehicleType(Integer.parseInt(resultSet.getString(4)));
+                driver.setPassword(resultSet.getString(5));
+                driver.setTel(resultSet.getString(6));
+                driver.setOauthProvider(resultSet.getString(7));
+                driver.setOauthSub(resultSet.getString(8));
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try {
+                if (this.preparedStatement != null) this.preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, e.getMessage());
+            }
+        }
+        return driver;
+    }
+
+    @Override
+    public void linkDriverOAuthByEmail(String email, String provider, String sub) {
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("link_driver_oauth_by_email"));
+            this.preparedStatement.setString(1, provider);
+            this.preparedStatement.setString(2, sub);
+            this.preparedStatement.setString(3, email);
+            this.preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try {
+                if (this.preparedStatement != null) this.preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, e.getMessage());
+            }
+        }
+    }
+
+    @Override
+    public void addOAuthDriver(Driver driver) {
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_driver_oauth"));
+            connection.setAutoCommit(false);
+
+            this.preparedStatement.setString(1, driver.getName());
+            this.preparedStatement.setString(2, driver.getEmail());
+            this.preparedStatement.setInt(3, driver.getVehicleType());
+            this.preparedStatement.setString(4, driver.getTel());
+            this.preparedStatement.setString(5, driver.getOauthProvider());
+            this.preparedStatement.setString(6, driver.getOauthSub());
+
+            this.preparedStatement.execute();
+            connection.commit();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try {
+                if (this.preparedStatement != null) this.preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, e.getMessage());
+            }
+        }
+    }
+
 }
