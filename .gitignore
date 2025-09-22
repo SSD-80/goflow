@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-/classes/
+.classes/
 
 # IDE files
 .idea/
