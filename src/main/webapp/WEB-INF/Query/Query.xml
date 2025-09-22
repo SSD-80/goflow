@@ -210,10 +210,29 @@
     </query>
 
     <!-- ride_by_id -->
+<!--    <query id="ride_by_id">-->
+<!--        <![CDATA[-->
+<!--            select * from ride where ride.rideId = ?-->
+<!--        ]]>-->
+<!--    </query>-->
+
     <query id="ride_by_id">
         <![CDATA[
-            select * from ride where ride.rideId = ?
-        ]]>
+        SELECT rideId,
+               start_latitude,
+               start_longitude,
+               end_latitude,
+               end_longitude,
+               vehicle_type,
+               distance,
+               fare,
+               date_time,
+               rider_id,     -- 10
+               driver_id,    -- 11
+               status        -- 12
+        FROM ride
+        WHERE ride.rideId = ?
+    ]]>
     </query>
 
     <!-- ride_by_rider -->
