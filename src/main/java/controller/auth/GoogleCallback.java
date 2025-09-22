@@ -1,7 +1,5 @@
 package controller.auth;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
