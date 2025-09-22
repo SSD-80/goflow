@@ -65,8 +65,10 @@ public class RiderServiceImpl implements IRiderService {
             this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_rider"));
             connection.setAutoCommit(false);
 
-//            String hashedPassword = generateMD5(rider.getPassword());
-            String hashedPassword = PasswordUtil.hashPassword(rider.getPassword());
+            String hashedPassword = null;
+            if (rider.getPassword() != null && !rider.getPassword().isEmpty()) {
+                hashedPassword = PasswordUtil.hashPassword(rider.getPassword());
+            }
 
             this.preparedStatement.setString(1, rider.getName());
             this.preparedStatement.setString(2, rider.getEmail());
@@ -263,30 +265,98 @@ public class RiderServiceImpl implements IRiderService {
         return riderList;
     }
 
-    // This method is used to generate the MD5 hash
-    public String generateMD5(String password) {
+//    // This method is used to generate the MD5 hash
+//    public String generateMD5(String password) {
+//        try {
+//            // Create MessageDigest instance for MD5
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//
+//            // Add password bytes to digest
+//            md.update(password.getBytes());
+//
+//            // Get the hash's bytes
+//            byte[] bytes = md.digest();
+//
+//            // Convert the bytes to a hexadecimal string
+//            StringBuilder sb = new StringBuilder();
+//            for (int i = 0; i < bytes.length; i++) {
+//                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+//            }
+//
+//            // Return the complete hash
+//            return sb.toString();
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+
+    public Rider getRiderByOAuth(String provider, String sub) {
+        Rider rider = null;
         try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("rider_by_oauth"));
+            this.preparedStatement.setString(1, provider);
+            this.preparedStatement.setString(2, sub);
 
-            // Add password bytes to digest
-            md.update(password.getBytes());
-
-            // Get the hash's bytes
-            byte[] bytes = md.digest();
-
-            // Convert the bytes to a hexadecimal string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            ResultSet resultSet = this.preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                rider = new Rider();
+                rider.setID(resultSet.getInt("id"));
+                rider.setName(resultSet.getString("name"));
+                rider.setEmail(resultSet.getString("email"));
+                rider.setPassword(resultSet.getString("password"));
+                rider.setTel(resultSet.getString("tel"));
+                rider.setOauthProvider(resultSet.getString("oauth_provider"));
+                rider.setOauthSub(resultSet.getString("oauth_sub"));
             }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try { if (this.preparedStatement != null) this.preparedStatement.close(); } catch (SQLException ignored) {}
+            try { if (connection != null) connection.close(); } catch (SQLException ignored) {}
+        }
+        return rider;
+    }
 
-            // Return the complete hash
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+    public void linkRiderOAuthByEmail(String email, String provider, String sub) {
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("link_rider_oauth_by_email"));
+            this.preparedStatement.setString(1, provider);
+            this.preparedStatement.setString(2, sub);
+            this.preparedStatement.setString(3, email);
+            this.preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try { if (this.preparedStatement != null) this.preparedStatement.close(); } catch (SQLException ignored) {}
+            try { if (connection != null) connection.close(); } catch (SQLException ignored) {}
         }
     }
+
+    public void addOAuthRider(Rider rider) {
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_rider_oauth"));
+            connection.setAutoCommit(false);
+
+            this.preparedStatement.setString(1, rider.getName());
+            this.preparedStatement.setString(2, rider.getEmail());
+            this.preparedStatement.setString(3, rider.getTel() != null ? rider.getTel() : "");
+            this.preparedStatement.setString(4, rider.getOauthProvider());
+            this.preparedStatement.setString(5, rider.getOauthSub());
+
+            this.preparedStatement.execute();
+            connection.commit();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try { if (this.preparedStatement != null) this.preparedStatement.close(); } catch (SQLException ignored) {}
+            try { if (connection != null) connection.close(); } catch (SQLException ignored) {}
+        }
+    }
+
+
 
 
 }

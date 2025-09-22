@@ -30,4 +30,12 @@ public interface IDriverService {
 
     // remove driver method
     void removeDriver(int id);
+
+
+    // --- OAuth related ---
+    Driver getDriverByOAuth(String provider, String sub);
+
+    void linkDriverOAuthByEmail(String email, String provider, String sub);
+
+    void addOAuthDriver(Driver driver);
 }

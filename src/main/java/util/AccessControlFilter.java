@@ -11,7 +11,6 @@ import java.io.IOException;
 public class AccessControlFilter implements Filter {
 
     private final String[] excludedUrls = {
-
             // public
             "/",
             "/DriverLogin",
@@ -22,10 +21,12 @@ public class AccessControlFilter implements Filter {
             "/AddRider",
             "/Login",
             "/Register",
-            "/DriverRegister",
-            "/RiderRegister",
             "/AdminLogin",
             "/index.jsp",
+
+            // OAuth endpoints
+            "/oauth/google",
+            "/oauth/callback",
 
             // css
             "/public/css/styles.css",
@@ -42,11 +43,10 @@ public class AccessControlFilter implements Filter {
             "/public/images/GoFlow_White.png",
             "/public/images/Hero-img.jpg",
             "/public/images/map_icon.png",
+            "/public/images/web_dark_sq_ctn@1x.png",
 
             // fonts
             "/public/fonts/Gabarito/Gabarito-VariableFont_wght.ttf",
-
-
     };
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
