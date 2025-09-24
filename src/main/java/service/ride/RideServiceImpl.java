@@ -441,4 +441,28 @@ public class RideServiceImpl implements IRideService {
         return rideList; // return list
     }
 
+    // Secure method: Get ride by ID with Rider ownership check
+    @Override
+    public Ride getRideByIdForRider(int rideId, int sessionRiderId, String role) {
+        Ride ride = this.getRideByID(rideId);
+
+        if (ride == null) {
+            return null;
+        }
+
+        System.out.println("DEBUG: Ride " + rideId +
+                " belongs to rider " + ride.getRider().getID() +
+                ", session user = " + sessionRiderId +
+                ", role = " + role);
+
+        // Ownership check: Rider can only access their own rides, unless Admin
+        if (!"Admin".equals(role) && ride.getRider().getID() != sessionRiderId) {
+            System.err.println("SECURITY ALERT: User " + sessionRiderId +
+                    " tried to access ride " + rideId +
+                    " owned by rider " + ride.getRider().getID());
+            throw new SecurityException("Unauthorized access to ride");
+        }
+
+        return ride;
+    }
 }

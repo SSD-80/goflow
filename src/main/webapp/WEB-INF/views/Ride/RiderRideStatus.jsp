@@ -30,8 +30,9 @@
 <jsp:include page="/WEB-INF/views/Common/Header.jsp"></jsp:include>
 
 <%
-    IRideService iRideService = new RideServiceImpl();
-    Ride ride = iRideService.getRideByID((Integer) request.getAttribute("ride_id"));
+//    IRideService iRideService = new RideServiceImpl();
+//    Ride ride = iRideService.getRideByID((Integer) request.getAttribute("ride_id"));
+    Ride ride = (Ride) request.getAttribute("ride");  // get the Ride object directly
 %>
 
 <div style="width: 100%; height: calc(100% - 60px); overflow: hidden;" class="con-mid">
