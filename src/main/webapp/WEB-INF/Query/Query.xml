@@ -210,10 +210,29 @@
     </query>
 
     <!-- ride_by_id -->
+<!--    <query id="ride_by_id">-->
+<!--        <![CDATA[-->
+<!--            select * from ride where ride.rideId = ?-->
+<!--        ]]>-->
+<!--    </query>-->
+
     <query id="ride_by_id">
         <![CDATA[
-            select * from ride where ride.rideId = ?
-        ]]>
+        SELECT rideId,
+               start_latitude,
+               start_longitude,
+               end_latitude,
+               end_longitude,
+               vehicle_type,
+               distance,
+               fare,
+               date_time,
+               rider_id,     -- 10
+               driver_id,    -- 11
+               status        -- 12
+        FROM ride
+        WHERE ride.rideId = ?
+    ]]>
     </query>
 
     <!-- ride_by_rider -->
@@ -273,6 +292,63 @@
             set v.name = ?, v.rate = ?
             where v.id = ?
         ]]>
+    </query>
+
+    <!-- Lookup rider by OAuth provider + sub -->
+    <query id="rider_by_oauth">
+        <![CDATA[
+        SELECT * FROM rider
+        WHERE rider.oauth_provider = ?
+          AND rider.oauth_sub      = ?
+    ]]>
+    </query>
+
+    <!-- Link OAuth to an existing rider (found by email) -->
+    <query id="link_rider_oauth_by_email">
+        <![CDATA[
+        UPDATE rider
+           SET oauth_provider = ?,
+               oauth_sub      = ?
+         WHERE email = ?
+    ]]>
+    </query>
+
+    <!-- Insert a brand-new OAuth rider (no password) -->
+    <query id="insert_rider_oauth">
+        <![CDATA[
+        INSERT INTO rider (name, email, password, tel, oauth_provider, oauth_sub)
+        VALUES (?, ?, NULL, ?, ?, ?)
+    ]]>
+    </query>
+
+
+    <!-- Lookup driver by OAuth provider + sub -->
+    <query id="driver_by_oauth">
+        <![CDATA[
+        SELECT * FROM driver
+        WHERE driver.oauth_provider = ?
+          AND driver.oauth_sub      = ?
+    ]]>
+    </query>
+
+    <!-- Link OAuth to an existing driver (found by email) -->
+    <query id="link_driver_oauth_by_email">
+        <![CDATA[
+        UPDATE driver
+           SET oauth_provider = ?,
+               oauth_sub      = ?
+         WHERE email = ?
+    ]]>
+    </query>
+
+    <!-- Insert a brand-new OAuth driver (no password) -->
+    <query id="insert_driver_oauth">
+        <![CDATA[
+        INSERT INTO driver
+            (name, email, vehicle_type, password, tel, oauth_provider, oauth_sub)
+        VALUES
+            (?, ?, ?, NULL, ?, ?, ?)
+    ]]>
     </query>
 
 

@@ -33,6 +33,12 @@ public class RiderLogin extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html");
+
+        String errorMessage = request.getParameter("errorMessage");
+        if (errorMessage != null) {
+            request.setAttribute("errorMessage", errorMessage);
+        }
+
         RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/WEB-INF/views/Auth/RiderLogin.jsp");
         dispatcher.forward(request, response);
     }
@@ -74,7 +80,9 @@ public class RiderLogin extends HttpServlet {
                 throw new AuthException("Invalid email or password");
 
         } catch (AuthException e) { // not authenticated exception
-            response.sendRedirect("./RiderLogin?flag=invalid"); // redirect to login with invalid flag
+            request.setAttribute("errorMessage", e.getMessage());
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/WEB-INF/views/Auth/RiderLogin.jsp");
+            dispatcher.forward(request, response);
             e.printStackTrace();
         } catch (EmptyInputsException e) { // empty inputs exception
             response.sendRedirect("./RiderLogin"); // redirect to login

@@ -21,6 +21,7 @@
         response.sendRedirect("./Login");
         return;
     }
+    String errorMessage = (String) request.getAttribute("errorMessage");
 %>
 
 <jsp:include page="/WEB-INF/views/Common/Header.jsp"></jsp:include>
@@ -31,6 +32,14 @@
             <button class="small-btn" onclick="window.location.href = './Login'">Back</button>
             <h3>Driver Login</h3>
         </div>
+
+        <!-- Error message block -->
+        <% if (errorMessage != null && !errorMessage.isEmpty()) { %>
+        <div class="error-message" style="color: red; margin-bottom: 15px; text-align: center;">
+            <%= errorMessage %>
+        </div>
+        <% } %>
+
         <form action="./DriverLogin" method="post" onsubmit="return formValidation()">
             <label>
                 <input id="email" name="email" placeholder="Email">
@@ -42,6 +51,16 @@
             </label>
             <input class="login-btn" type="submit" value="Login">
         </form>
+        <hr style="margin: 20px 0;"/>
+
+        <!-- Google Login button -->
+        <div style="margin-top: 30px; text-align:center;">
+            <a href="<%= request.getContextPath() %>/oauth/google?role=Driver">
+                <img src="./public/images/web_dark_sq_ctn@1x.png"
+                     alt="Sign in with Google"
+                     style="height:40px; cursor:pointer;"/>
+            </a>
+        </div>
         <p class="legal-footer">
             © <span id="year"></span> GoFlow. All rights reserved.
         </p>

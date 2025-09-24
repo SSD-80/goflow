@@ -3,6 +3,7 @@ package service.driver;
 import model.Driver;
 import org.xml.sax.SAXException;
 import util.DBConnectionUtil;
+import util.PasswordUtil;
 import util.QueryUtil;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -58,7 +59,10 @@ public class DriverServiceImpl implements IDriverService {
             this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_driver"));
             connection.setAutoCommit(false);
 
-            String hashedPassword = generateMD5(driver.getPassword());
+            String hashedPassword = null;
+            if (driver.getPassword() != null && !driver.getPassword().isEmpty()) {
+                hashedPassword = PasswordUtil.hashPassword(driver.getPassword());
+            }
 
             this.preparedStatement.setString(1, driver.getName());
             this.preparedStatement.setString(2, driver.getEmail());
@@ -301,28 +305,87 @@ public class DriverServiceImpl implements IDriverService {
         return driverList;
     }
 
-    // This method is used to generate the MD5 hash
-    public String generateMD5(String password) {
+    @Override
+    public Driver getDriverByOAuth(String provider, String sub) {
+        Driver driver = null;
         try {
-            // Create MessageDigest instance for MD5
-            MessageDigest md = MessageDigest.getInstance("MD5");
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("driver_by_oauth"));
+            this.preparedStatement.setString(1, provider);
+            this.preparedStatement.setString(2, sub);
 
-            // Add password bytes to digest
-            md.update(password.getBytes());
-
-            // Get the hash's bytes
-            byte[] bytes = md.digest();
-
-            // Convert the bytes to a hexadecimal string
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < bytes.length; i++) {
-                sb.append(Integer.toString((bytes[i] & 0xff) + 0x100, 16).substring(1));
+            ResultSet resultSet = this.preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                driver = new Driver();
+                driver.setID(resultSet.getInt(1));
+                driver.setName(resultSet.getString(1));
+                driver.setEmail(resultSet.getString(3));
+                driver.setVehicleType(Integer.parseInt(resultSet.getString(4)));
+                driver.setPassword(resultSet.getString(5));
+                driver.setTel(resultSet.getString(6));
+                driver.setOauthProvider(resultSet.getString(7));
+                driver.setOauthSub(resultSet.getString(8));
             }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try {
+                if (this.preparedStatement != null) this.preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, e.getMessage());
+            }
+        }
+        return driver;
+    }
 
-            // Return the complete hash
-            return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+    @Override
+    public void linkDriverOAuthByEmail(String email, String provider, String sub) {
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("link_driver_oauth_by_email"));
+            this.preparedStatement.setString(1, provider);
+            this.preparedStatement.setString(2, sub);
+            this.preparedStatement.setString(3, email);
+            this.preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try {
+                if (this.preparedStatement != null) this.preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, e.getMessage());
+            }
         }
     }
+
+    @Override
+    public void addOAuthDriver(Driver driver) {
+        try {
+            connection = DBConnectionUtil.getDBConnection();
+            this.preparedStatement = connection.prepareStatement(QueryUtil.queryByID("insert_driver_oauth"));
+            connection.setAutoCommit(false);
+
+            this.preparedStatement.setString(1, driver.getName());
+            this.preparedStatement.setString(2, driver.getEmail());
+            this.preparedStatement.setInt(3, driver.getVehicleType());
+            this.preparedStatement.setString(4, driver.getTel());
+            this.preparedStatement.setString(5, driver.getOauthProvider());
+            this.preparedStatement.setString(6, driver.getOauthSub());
+
+            this.preparedStatement.execute();
+            connection.commit();
+        } catch (Exception e) {
+            log.log(Level.SEVERE, e.getMessage());
+        } finally {
+            try {
+                if (this.preparedStatement != null) this.preparedStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                log.log(Level.SEVERE, e.getMessage());
+            }
+        }
+    }
+
 }
