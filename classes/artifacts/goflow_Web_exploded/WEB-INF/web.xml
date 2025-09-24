@@ -335,8 +335,25 @@
     <servlet-name>AdminLogin</servlet-name>
     <url-pattern>/AdminLogin</url-pattern>
   </servlet-mapping>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/WEB-INF/views/error/404.jsp</location>
-    </error-page>
+  <filter>
+      <filter-name>ContentSecurityPolicyFilter</filter-name>
+      <filter-class>config.ContentSecurityPolicyFilter</filter-class>
+  </filter>
+  <filter-mapping>
+      <filter-name>ContentSecurityPolicyFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+      <filter-name>XFrameOptionsFilter</filter-name>
+      <filter-class>config.XFrameOptionsFilter</filter-class>
+  </filter>
+  <filter-mapping>
+      <filter-name>XFrameOptionsFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <error-page>
+      <error-code>404</error-code>
+      <location>/WEB-INF/views/error/404.jsp</location>
+  </error-page>
 </web-app>

@@ -1,3 +1,4 @@
+<%@page import="org.owasp.encoder.Encode"%>
 <%@page import="model.Rider"%>
 <%@page import="service.rider.IRiderService"%>
 <%@page import="service.rider.RiderServiceImpl"%>
@@ -90,10 +91,10 @@
         for(Rider r : rider){
     %>
     <tr>
-        <td> <%=r.getID() %> </td>
-        <td> <%=r.getName() %> </td>
-        <td> <%=r.getEmail() %> </td>
-        <td> <%=r.getTel() %> </td>
+        <td><%= Encode.forHtml(String.valueOf(r.getID())) %></td>
+        <td><%= Encode.forHtml(r.getName()) %></td>
+        <td><%= Encode.forHtml(r.getEmail()) %></td>
+         <td><%= Encode.forHtml(r.getTel()) %></td>
         <td>
             <form method="POST" action="GetRider">
                 <input type="hidden" name="riderID" value="<%=r.getID()%>"/>

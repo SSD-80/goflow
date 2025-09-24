@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import model.City;
 import service.city.CityServiceImpl;
 import service.city.ICityService;
+import org.owasp.encoder.Encode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ public class ListCity extends HttpServlet {
 		Gson gson = new Gson();
 		String cityListJson = gson.toJson(cityList);
 
-		response.getWriter().append(cityListJson);
+		response.getWriter().append(Encode.forHtml(cityListJson));
 	}
 
 	/**
