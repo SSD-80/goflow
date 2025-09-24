@@ -16,7 +16,8 @@ public class AccessControlFilter implements Filter {
             "/Login", "/Register", "/Logout",
             "/AdminLogin", "/DriverLogin", "/RiderLogin",
             "/DriverRegister", "/RiderRegister",
-            "/AddDriver", "/AddRider",   // self-registration
+            "/AddDriver", "/AddRider", "/oauth/google",
+            "/oauth/callback",   // self-registration
             // static files
             "/public/css/styles.css", "/public/css/styles_home.css",
             "/public/js/scripts.js", "/public/js/location.js",
@@ -24,7 +25,8 @@ public class AccessControlFilter implements Filter {
             "/public/js/validation/rideValidation.js",
             "/public/images/GoFlow-Logo.png", "/public/images/GoFlow_White.png",
             "/public/images/Hero-img.jpg", "/public/images/map_icon.png",
-            "/public/fonts/Gabarito/Gabarito-VariableFont_wght.ttf"
+            "/public/fonts/Gabarito/Gabarito-VariableFont_wght.ttf",
+            "/public/images/web_dark_sq_ctn@1x.png"
     };
 
     @Override
@@ -132,44 +134,55 @@ public class AccessControlFilter implements Filter {
 //@WebFilter("/*")
 //public class AccessControlFilter implements Filter {
 //
-//    private final String[] excludedUrls = {
+//private final String[] excludedUrls = {
+//        "/", "/index.jsp",
+//        "/Login", "/Register", "/Logout",
+//        "/AdminLogin", "/DriverLogin", "/RiderLogin",
+//        "/DriverRegister", "/RiderRegister",
+//        "/AddDriver", "/AddRider",   // self-registration
+//        // static files
+//        "/public/css/styles.css", "/public/css/styles_home.css",
+//        "/public/js/scripts.js", "/public/js/location.js",
+//        // public
+//        "/",
+//        "/DriverLogin",
+//        "/RiderLogin",
+//        "/DriverRegister",
+//        "/RiderRegister",
+//        "/AddDriver",
+//        "/AddRider",
+//        "/Login",
+//        "/Register",
+//        "/AdminLogin",
+//        "/index.jsp",
 //
-//            // public
-//            "/",
-//            "/DriverLogin",
-//            "/RiderLogin",
-//            "/DriverRegister",
-//            "/RiderRegister",
-//            "/AddDriver",
-//            "/AddRider",
-//            "/Login",
-//            "/Register",
-//            "/DriverRegister",
-//            "/RiderRegister",
-//            "/AdminLogin",
-//            "/index.jsp",
+//        // OAuth endpoints
+//        "/oauth/google",
+//        "/oauth/callback",
 //
-//            // css
-//            "/public/css/styles.css",
-//            "/public/css/styles_home.css",
+//        // css
+//        "/public/css/styles.css",
+//        "/public/css/styles_home.css",
 //
-//            // scripts
-//            "/public/js/scripts.js",
-//            "/public/js/location.js",
-//            "/public/js/validation/loginValidation.js",
-//            "/public/js/validation/rideValidation.js",
+//        // scripts
+//        "/public/js/scripts.js",
+//        "/public/js/location.js",
+//        "/public/js/validation/loginValidation.js",
+//        "/public/js/validation/rideValidation.js",
 //
-//            // images
-//            "/public/images/GoFlow-Logo.png",
-//            "/public/images/GoFlow_White.png",
-//            "/public/images/Hero-img.jpg",
-//            "/public/images/map_icon.png",
+//        // images
+//        "/public/images/GoFlow-Logo.png",
+//        "/public/images/GoFlow_White.png",
+//        "/public/images/Hero-img.jpg",
+//        "/public/images/map_icon.png",
+//        "/public/images/web_dark_sq_ctn@1x.png",
 //
-//            // fonts
-//            "/public/fonts/Gabarito/Gabarito-VariableFont_wght.ttf",
-//
-//
-//    };
+//        // fonts
+//        "/public/fonts/Gabarito/Gabarito-VariableFont_wght.ttf",
+//        "/public/images/GoFlow-Logo.png", "/public/images/GoFlow_White.png",
+//        "/public/images/Hero-img.jpg", "/public/images/map_icon.png",
+//        "/public/fonts/Gabarito/Gabarito-VariableFont_wght.ttf"
+//};
 //
 //    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 //            throws IOException, ServletException {

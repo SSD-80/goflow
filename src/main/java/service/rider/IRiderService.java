@@ -21,4 +21,11 @@ public interface IRiderService {
 	Rider updateRider(int id, Rider rider); // update rider method
 
 	void removeRider(int id); // remove rider method
+
+    // --- OAuth support ---
+    Rider getRiderByOAuth(String provider, String sub);
+
+    void linkRiderOAuthByEmail(String email, String provider, String sub);
+
+    void addOAuthRider(Rider rider);
 }

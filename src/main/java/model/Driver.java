@@ -10,19 +10,32 @@ public class Driver {
     private int vehicleType;
     private String password;
     private String tel;
+    private String oauthProvider;
+    private String oauthSub;
 
     // default constructor
-    public Driver() {
+    public Driver() {}
 
-    }
-
-    // parameterized constructor
-    public Driver(int uid, String name, String email, String password, String tel) {
-        this.id = uid;
+    // parameterized constructor (without OAuth)
+    public Driver(int id, String name, String email, String password, String tel) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.tel = tel;
+    }
+
+    // parameterized constructor (with OAuth)
+    public Driver(int id, String name, String email, int vehicleType, String password, String tel,
+                  String oauthProvider, String oauthSub) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.vehicleType = vehicleType;
+        this.password = password;
+        this.tel = tel;
+        this.oauthProvider = oauthProvider;
+        this.oauthSub = oauthSub;
     }
 
     // getters and setters
@@ -30,8 +43,8 @@ public class Driver {
         return id;
     }
 
-    public void setID(int uid) {
-        this.id = uid;
+    public void setID(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -74,10 +87,31 @@ public class Driver {
         this.tel = tel;
     }
 
-    // toString method
-    public String toString() {
-        return "Driver ID = " + this.id + "\n" + "Driver Name = " + this.name + "\n" + "Email = " + this.email + "\n" + "Telephone = " + this.tel;
+    public String getOauthProvider() {
+        return oauthProvider;
     }
 
+    public void setOauthProvider(String oauthProvider) {
+        this.oauthProvider = oauthProvider;
+    }
 
+    public String getOauthSub() {
+        return oauthSub;
+    }
+
+    public void setOauthSub(String oauthSub) {
+        this.oauthSub = oauthSub;
+    }
+
+    // toString method
+    @Override
+    public String toString() {
+        return "Driver ID = " + this.id
+                + "\nDriver Name = " + this.name
+                + "\nEmail = " + this.email
+                + "\nTelephone = " + this.tel
+                + "\nVehicle Type = " + this.vehicleType
+                + (oauthProvider != null ? "\nOAuth Provider = " + this.oauthProvider : "")
+                + (oauthSub != null ? "\nOAuth Sub = " + this.oauthSub : "");
+    }
 }

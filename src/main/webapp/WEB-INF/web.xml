@@ -335,8 +335,24 @@
     <servlet-name>AdminLogin</servlet-name>
     <url-pattern>/AdminLogin</url-pattern>
   </servlet-mapping>
-    <error-page>
-        <error-code>404</error-code>
-        <location>/WEB-INF/views/error/404.jsp</location>
-    </error-page>
+  <servlet>
+    <servlet-name>GoogleAuth</servlet-name>
+    <servlet-class>controller.auth.GoogleAuth</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GoogleAuth</servlet-name>
+    <url-pattern>/oauth/google</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>GoogleCallback</servlet-name>
+    <servlet-class>controller.auth.GoogleCallback</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GoogleCallback</servlet-name>
+    <url-pattern>/oauth/callback</url-pattern>
+  </servlet-mapping>
+  <error-page>
+    <error-code>404</error-code>
+    <location>/WEB-INF/views/error/404.jsp</location>
+  </error-page>
 </web-app>
